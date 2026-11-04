@@ -10,113 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<style>
-/* Layout: a single reading column with a left "margin note" rail for dates and labels, like an annotated CV. */
-:root{
-  --bg:#f5f6f8; --surface:#ffffff; --ink:#131a2b; --muted:#5a6275; --line:#dfe2ea;
-  --accent:#2f4bd6; --accent-soft:#e6eafc; --mark:#ffe58a;
-  --ok:#1f7a4d; --warn:#9a6400;
-  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
-  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
-  --step-0:1.0625rem; --step-1:1.3rem; --step-2:1.75rem; --step-3:clamp(2.4rem,6vw,4.25rem);
-  --rail:9.5rem; --maxw:62rem;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0f1320; --surface:#161b2c; --ink:#e7eaf3; --muted:#9aa2b8; --line:#272e45;
-  --accent:#8fa3ff; --accent-soft:#1e2647; --mark:#5b4a10; --ok:#6fd3a0; --warn:#f0c062; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0f1320; --surface:#161b2c; --ink:#e7eaf3; --muted:#9aa2b8; --line:#272e45;
-  --accent:#8fa3ff; --accent-soft:#1e2647; --mark:#5b4a10; --ok:#6fd3a0; --warn:#f0c062; color-scheme:dark}
-
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--step-0)/1.65 var(--body);-webkit-font-smoothing:antialiased}
-a{color:var(--accent);text-underline-offset:3px}
-a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
-.wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-h1,h2,h3{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0}
-.label{font:500 .75rem/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.placeholder{background:var(--mark);padding:0 .2em;border-radius:2px}
-
-/* Header */
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.75rem}
-.brand{font:800 1.05rem/1 var(--display);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
-nav ul{display:flex;gap:1.25rem;list-style:none;margin:0;padding:0;font:500 .82rem/1 var(--mono)}
-nav a{color:var(--muted);text-decoration:none}
-nav a:hover{color:var(--ink)}
-.theme-btn{background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:.35rem .7rem;font:500 .75rem/1 var(--mono);cursor:pointer}
-@media (max-width:760px){nav ul{display:none}}
-
-/* Hero */
-.hero .wrap{padding-block:4.5rem 3.5rem;display:grid;gap:1.5rem}
-.hero h1{font-size:var(--step-3);font-weight:800;letter-spacing:-.03em}
-.hero h1 em{font-style:normal;color:var(--accent)}
-.hero .lede{font-size:var(--step-1);max-width:38rem;color:var(--ink);margin:0}
-.status{display:inline-flex;align-items:center;gap:.5rem;font:500 .8rem/1 var(--mono);color:var(--muted)}
-.status i{width:.55rem;height:.55rem;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 20%,transparent)}
-.ctas{display:flex;flex-wrap:wrap;gap:.75rem}
-.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.1rem;border-radius:8px;font:600 .95rem/1 var(--display);text-decoration:none;border:1px solid var(--line);color:var(--ink);background:var(--surface);transition:transform .15s,border-color .15s}
-.btn:hover{transform:translateY(-1px);border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
-.facts{display:flex;flex-wrap:wrap;gap:2rem;padding-top:1.25rem;border-top:1px solid var(--line);margin-top:.5rem}
-.facts div{display:grid;gap:.2rem}
-.facts b{font:800 var(--step-2)/1 var(--display);font-variant-numeric:tabular-nums}
-
-/* Sections: rail + content */
-section.block .wrap{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:2rem;padding-block:3.5rem;border-top:1px solid var(--line)}
-section.block h2{font-size:var(--step-2);letter-spacing:-.02em;margin-bottom:1.25rem}
-.rail{padding-top:.55rem}
-@media (max-width:760px){section.block .wrap{grid-template-columns:minmax(0,1fr);gap:.5rem}.rail{padding-top:0}}
-.prose p{max-width:65ch;margin:0 0 1rem}
-
-/* Research entries */
-.entries{display:grid;gap:1.75rem}
-.entry{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:1.25rem;margin-left:calc(-1 * (var(--rail) + 2rem))}
-.entry .when{font:500 .8rem/1.6 var(--mono);color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
-@media (max-width:760px){.entry{grid-template-columns:minmax(0,1fr);margin-left:0;gap:.25rem}.entry .when{text-align:left}}
-.entry h3{font-size:var(--step-1);font-weight:600;margin-bottom:.35rem}
-.entry p{margin:.35rem 0;max-width:65ch}
-.cite{font-size:.95rem;color:var(--muted)}
-.cite b{color:var(--ink);font-weight:600}
-.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
-.chip{font:500 .72rem/1 var(--mono);padding:.35rem .55rem;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
-.chip.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
-.chip.warn{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
-.links{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.5rem;font:500 .82rem/1 var(--mono)}
-
-/* Academics */
-.acad{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1rem}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.25rem}
-.panel h3{font-size:1.05rem;margin-bottom:.6rem}
-.gpa{font:800 2.6rem/1 var(--display);font-variant-numeric:tabular-nums}
-.gpa small{font:500 .9rem/1 var(--mono);color:var(--muted)}
-.course{display:flex;justify-content:space-between;gap:1rem;padding:.4rem 0;border-bottom:1px dashed var(--line);font-size:.95rem}
-.course:last-child{border-bottom:0}
-.course span:last-child{font:500 .8rem/1.8 var(--mono);color:var(--muted);white-space:nowrap}
-
-/* Awards list */
-.awards{list-style:none;margin:0;padding:0;display:grid}
-.awards li{display:grid;grid-template-columns:4rem minmax(0,1fr);gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--line)}
-.awards li:last-child{border-bottom:0}
-.awards .yr{font:500 .85rem/1.7 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
-.awards b{font-family:var(--display);font-weight:600}
-.awards span.d{display:block;color:var(--muted);font-size:.95rem}
-
-/* Skills */
-.skills{display:grid;gap:1rem}
-.skills div{display:grid;grid-template-columns:8rem minmax(0,1fr);gap:1rem;align-items:baseline}
-@media (max-width:520px){.skills div{grid-template-columns:minmax(0,1fr);gap:.25rem}}
-.skills p{margin:0}
-
-/* Contact */
-.contact-row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
-.addr{font:500 1rem/1 var(--mono);padding:.75rem 1rem;border:1px solid var(--line);border-radius:8px;background:var(--surface);user-select:all}
-footer .wrap{padding-block:2.5rem;border-top:1px solid var(--line);color:var(--muted);font:400 .8rem/1.5 var(--mono)}
-</style>
+<link rel="stylesheet" href="assets/site.css">
 
 <header class="top">
   <div class="wrap">
@@ -177,6 +71,7 @@ footer .wrap{padding-block:2.5rem;border-top:1px solid var(--line);color:var(--m
               <p>I reverse-engineered an undocumented radiation detection and laser-marking system built on a Raspberry Pi, an ESP32 and stepper motors, reconstructing its architecture from minimal documentation. I mapped how its Python/Flask web interface, the ESP32 serial pan/tilt link and the GPIO stepper control fit together.</p>
               <p>I then redesigned and 3D printed the laser module housing in Autodesk Fusion, fixing flaws in the original that affected laser mounting and alignment. Now I'm developing new web-interface software for the system, starting with a live crosshair overlay that shows where the laser is aimed.</p>
               <div class="chips"><span class="chip warn">In progress</span><span class="chip">Raspberry Pi</span><span class="chip">ESP32</span><span class="chip">Python / Flask</span><span class="chip">Autodesk Fusion</span></div>
+              <a class="learn" href="projects/nesel-research.html">Learn more: code, diagrams &amp; photos →</a>
             </div>
           </article>
         </div>
@@ -196,6 +91,7 @@ footer .wrap{padding-block:2.5rem;border-top:1px solid var(--line);color:var(--m
               <h3>Space Adventure Game</h3>
               <p>A multi-chapter text adventure written in C that runs on an STM32 Cortex-M4, with UART serial as the game console. Puzzles compute their answers with inline ARM assembly (MOV, ADD, LSL) and use ideas like bit widths and Ohm's law. Conditional compilation gives two build targets: x86 for fast testing and debugging, and ARM through arm-none-eabi-gcc with a custom linker script.</p>
               <div class="chips"><span class="chip">C</span><span class="chip">ARM Assembly</span><span class="chip">UART</span><span class="chip">arm-none-eabi-gcc</span></div>
+              <a class="learn" href="projects/space-adventure.html">Learn more: code, diagrams &amp; photos →</a>
             </div>
           </article>
           <article class="entry">
@@ -204,6 +100,7 @@ footer .wrap{padding-block:2.5rem;border-top:1px solid var(--line);color:var(--m
               <h3>Traffic Light Sequencer</h3>
               <p>A traffic-light controller clocked by a 555 timer, using a 74LS163 4-bit synchronous counter and decoding logic to drive the light sequence.</p>
               <div class="chips"><span class="chip">555 Timer</span><span class="chip">74LS163</span><span class="chip">Sequential circuits</span></div>
+              <a class="learn" href="projects/traffic-light.html">Learn more: code, diagrams &amp; photos →</a>
             </div>
           </article>
         </div>
@@ -313,24 +210,7 @@ footer .wrap{padding-block:2.5rem;border-top:1px solid var(--line);color:var(--m
 
 <footer><div class="wrap">© 2026 Brayden Tearle · Last updated November 2026</div></footer>
 
-<script>
-(function(){
-  var root=document.documentElement, btn=document.getElementById('theme-btn');
-  try{var saved=localStorage.getItem('theme'); if(saved) root.setAttribute('data-theme',saved);}catch(e){}
-  btn.addEventListener('click',function(){
-    var cur=root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
-    var next=cur==='dark'?'light':'dark'; root.setAttribute('data-theme',next);
-    try{localStorage.setItem('theme',next);}catch(e){}
-  });
-  var copy=document.getElementById('copy-btn'), email=document.getElementById('email');
-  copy.addEventListener('click',function(){
-    var t=email.textContent;
-    var done=function(){copy.textContent='Copied';setTimeout(function(){copy.textContent='Copy email'},1600)};
-    var fallback=function(){var r=document.createRange();r.selectNodeContents(email);var s=getSelection();s.removeAllRanges();s.addRange(r);copy.textContent='Selected, press Ctrl+C'};
-    if(navigator.clipboard){navigator.clipboard.writeText(t).then(done,fallback)}else{fallback()}
-  });
-})();
-</script>
+<script src="assets/site.js"></script>
 <!--BODY-END-->
 </body>
 </html>
