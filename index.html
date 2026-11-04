@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--BODY-START-->
+<title>Your Name · Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Portfolio of Your Name: research, resume, academics and achievements.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column with a left "margin note" rail for dates and labels, like an annotated CV. */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#131a2b; --muted:#5a6275; --line:#dfe2ea;
+  --accent:#2f4bd6; --accent-soft:#e6eafc; --mark:#ffe58a;
+  --ok:#1f7a4d; --warn:#9a6400;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --step-0:1.0625rem; --step-1:1.3rem; --step-2:1.75rem; --step-3:clamp(2.4rem,6vw,4.25rem);
+  --rail:9.5rem; --maxw:62rem;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1320; --surface:#161b2c; --ink:#e7eaf3; --muted:#9aa2b8; --line:#272e45;
+  --accent:#8fa3ff; --accent-soft:#1e2647; --mark:#5b4a10; --ok:#6fd3a0; --warn:#f0c062; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1320; --surface:#161b2c; --ink:#e7eaf3; --muted:#9aa2b8; --line:#272e45;
+  --accent:#8fa3ff; --accent-soft:#1e2647; --mark:#5b4a10; --ok:#6fd3a0; --warn:#f0c062; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--step-0)/1.65 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0}
+.label{font:500 .75rem/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.placeholder{background:var(--mark);padding:0 .2em;border-radius:2px}
+
+/* Header */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.75rem}
+.brand{font:800 1.05rem/1 var(--display);color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+nav ul{display:flex;gap:1.25rem;list-style:none;margin:0;padding:0;font:500 .82rem/1 var(--mono)}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--ink)}
+.theme-btn{background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:.35rem .7rem;font:500 .75rem/1 var(--mono);cursor:pointer}
+@media (max-width:760px){nav ul{display:none}}
+
+/* Hero */
+.hero .wrap{padding-block:4.5rem 3.5rem;display:grid;gap:1.5rem}
+.hero h1{font-size:var(--step-3);font-weight:800;letter-spacing:-.03em}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .lede{font-size:var(--step-1);max-width:38rem;color:var(--ink);margin:0}
+.status{display:inline-flex;align-items:center;gap:.5rem;font:500 .8rem/1 var(--mono);color:var(--muted)}
+.status i{width:.55rem;height:.55rem;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 20%,transparent)}
+.ctas{display:flex;flex-wrap:wrap;gap:.75rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.1rem;border-radius:8px;font:600 .95rem/1 var(--display);text-decoration:none;border:1px solid var(--line);color:var(--ink);background:var(--surface);transition:transform .15s,border-color .15s}
+.btn:hover{transform:translateY(-1px);border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.facts{display:flex;flex-wrap:wrap;gap:2rem;padding-top:1.25rem;border-top:1px solid var(--line);margin-top:.5rem}
+.facts div{display:grid;gap:.2rem}
+.facts b{font:800 var(--step-2)/1 var(--display);font-variant-numeric:tabular-nums}
+
+/* Sections: rail + content */
+section.block .wrap{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:2rem;padding-block:3.5rem;border-top:1px solid var(--line)}
+section.block h2{font-size:var(--step-2);letter-spacing:-.02em;margin-bottom:1.25rem}
+.rail{padding-top:.55rem}
+@media (max-width:760px){section.block .wrap{grid-template-columns:minmax(0,1fr);gap:.5rem}.rail{padding-top:0}}
+.prose p{max-width:65ch;margin:0 0 1rem}
+
+/* Research entries */
+.entries{display:grid;gap:1.75rem}
+.entry{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:1.25rem;margin-left:calc(-1 * (var(--rail) + 2rem))}
+.entry .when{font:500 .8rem/1.6 var(--mono);color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:760px){.entry{grid-template-columns:minmax(0,1fr);margin-left:0;gap:.25rem}.entry .when{text-align:left}}
+.entry h3{font-size:var(--step-1);font-weight:600;margin-bottom:.35rem}
+.entry p{margin:.35rem 0;max-width:65ch}
+.cite{font-size:.95rem;color:var(--muted)}
+.cite b{color:var(--ink);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
+.chip{font:500 .72rem/1 var(--mono);padding:.35rem .55rem;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.chip.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
+.chip.warn{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+.links{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.5rem;font:500 .82rem/1 var(--mono)}
+
+/* Academics */
+.acad{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1rem}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.25rem}
+.panel h3{font-size:1.05rem;margin-bottom:.6rem}
+.gpa{font:800 2.6rem/1 var(--display);font-variant-numeric:tabular-nums}
+.gpa small{font:500 .9rem/1 var(--mono);color:var(--muted)}
+.course{display:flex;justify-content:space-between;gap:1rem;padding:.4rem 0;border-bottom:1px dashed var(--line);font-size:.95rem}
+.course:last-child{border-bottom:0}
+.course span:last-child{font:500 .8rem/1.8 var(--mono);color:var(--muted);white-space:nowrap}
+
+/* Awards list */
+.awards{list-style:none;margin:0;padding:0;display:grid}
+.awards li{display:grid;grid-template-columns:4rem minmax(0,1fr);gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--line)}
+.awards li:last-child{border-bottom:0}
+.awards .yr{font:500 .85rem/1.7 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.awards b{font-family:var(--display);font-weight:600}
+.awards span.d{display:block;color:var(--muted);font-size:.95rem}
+
+/* Skills */
+.skills{display:grid;gap:1rem}
+.skills div{display:grid;grid-template-columns:8rem minmax(0,1fr);gap:1rem;align-items:baseline}
+@media (max-width:520px){.skills div{grid-template-columns:minmax(0,1fr);gap:.25rem}}
+.skills p{margin:0}
+
+/* Contact */
+.contact-row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+.addr{font:500 1rem/1 var(--mono);padding:.75rem 1rem;border:1px solid var(--line);border-radius:8px;background:var(--surface);user-select:all}
+footer .wrap{padding-block:2.5rem;border-top:1px solid var(--line);color:var(--muted);font:400 .8rem/1.5 var(--mono)}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">Your Name</a>
+    <nav aria-label="Sections"><ul>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#academics">Academics</a></li>
+      <li><a href="#awards">Awards</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul></nav>
+    <button class="theme-btn" id="theme-btn" type="button" aria-label="Toggle color theme">Theme</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <span class="status"><i></i>Open to summer 2027 internships</span>
+      <h1>Your Name studies <em>your field</em> and builds things that matter.</h1>
+      <p class="lede">B.S. candidate in <span class="placeholder">Major</span> at <span class="placeholder">University</span>. I work on <span class="placeholder">one sentence about your research focus</span>, and I'm looking for roles in <span class="placeholder">target industry or role</span>.</p>
+      <div class="ctas">
+        <a class="btn primary" href="assets/resume.pdf">Download résumé (PDF)</a>
+        <a class="btn" href="#research">See my research</a>
+        <a class="btn" href="https://www.linkedin.com/">LinkedIn</a>
+        <a class="btn" href="https://github.com/">GitHub</a>
+      </div>
+      <div class="facts">
+        <div><b>3.8</b><span class="label">GPA / 4.0</span></div>
+        <div><b>2</b><span class="label">Research projects</span></div>
+        <div><b>1</b><span class="label">Publication</span></div>
+        <div><b>2027</b><span class="label">Expected graduation</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="rail label">About</div>
+      <div class="prose">
+        <h2>A short introduction</h2>
+        <p>Example text: I'm a third-year student who likes problems where careful measurement meets real-world impact. In the lab I've learned to design experiments, write clean analysis code, and explain results to people outside my field.</p>
+        <p>Outside class I <span class="placeholder">club, team, job or volunteer work</span>. Replace this paragraph with two or three sentences in your own voice.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="research">
+    <div class="wrap">
+      <div class="rail label">Research</div>
+      <div>
+        <h2>Research</h2>
+        <div class="entries">
+          <article class="entry">
+            <div class="when">2025 – present</div>
+            <div>
+              <h3>Example project title: what you studied, in plain words</h3>
+              <p class="cite"><b>Your Name</b>, A. Coauthor, P. Advisor. <i>Journal or Conference Name</i>, 2026. doi:10.0000/example</p>
+              <p>Two sentences: the question, what you did, and the result with a number if you have one (for example, “improved accuracy by 12%”).</p>
+              <div class="chips"><span class="chip ok">Published</span><span class="chip">Python</span><span class="chip">Statistics</span></div>
+              <div class="links"><a href="#">Paper</a><a href="#">Poster</a><a href="#">Code</a></div>
+            </div>
+          </article>
+          <article class="entry">
+            <div class="when">2024 – 2025</div>
+            <div>
+              <h3>Second example project</h3>
+              <p class="cite"><b>Your Name</b>, Advisor Name. Poster at <i>Undergraduate Research Symposium</i>, Apr 2025.</p>
+              <p>What you contributed, the methods you used, and what you learned. Employers read this for skills, so name the tools.</p>
+              <div class="chips"><span class="chip warn">In progress</span><span class="chip">Lab methods</span><span class="chip">Data analysis</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="experience">
+    <div class="wrap">
+      <div class="rail label">Experience</div>
+      <div>
+        <h2>Experience</h2>
+        <div class="entries">
+          <article class="entry">
+            <div class="when">Summer 2026</div>
+            <div>
+              <h3>Example Intern · Company Name</h3>
+              <p>One or two results-first bullets turned into a sentence: what you shipped or improved and how much.</p>
+            </div>
+          </article>
+          <article class="entry">
+            <div class="when">2024 – present</div>
+            <div>
+              <h3>Undergraduate Research Assistant · Lab Name</h3>
+              <p>Responsibilities and outcomes. The full history lives in the résumé PDF.</p>
+            </div>
+          </article>
+        </div>
+        <div class="links" style="margin-top:1.5rem"><a href="assets/resume.pdf">Full résumé (PDF) →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="academics">
+    <div class="wrap">
+      <div class="rail label">Academics</div>
+      <div>
+        <h2>Academics</h2>
+        <div class="acad">
+          <div class="panel">
+            <h3>University Name</h3>
+            <p style="margin:0 0 .9rem">B.S. Major, Minor<br><span class="label">Expected May 2027</span></p>
+            <div class="gpa">3.80 <small>/ 4.00 cumulative</small></div>
+            <p class="label" style="margin:.6rem 0 0">Major GPA 3.90 · Dean's List ×4</p>
+          </div>
+          <div class="panel">
+            <h3>Relevant coursework</h3>
+            <div class="course"><span>Example Course I</span><span>A</span></div>
+            <div class="course"><span>Example Course II</span><span>A−</span></div>
+            <div class="course"><span>Statistics for Research</span><span>A</span></div>
+            <div class="course"><span>Technical Writing</span><span>A</span></div>
+          </div>
+          <div class="panel">
+            <h3>Official transcript</h3>
+            <p style="margin:0 0 .9rem;font-size:.95rem">Available on request for employers and programs. Email me and I'll send an official copy.</p>
+            <a class="btn" href="#contact">Request transcript</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="awards">
+    <div class="wrap">
+      <div class="rail label">Achievements</div>
+      <div>
+        <h2>Awards &amp; honors</h2>
+        <ul class="awards">
+          <li><span class="yr">2026</span><span><b>Example Research Fellowship</b><span class="d">Awarded to 5 of 120 applicants; funded summer research.</span></span></li>
+          <li><span class="yr">2025</span><span><b>Best Poster, Undergraduate Symposium</b><span class="d">Selected from 60 presenters.</span></span></li>
+          <li><span class="yr">2024</span><span><b>Dean's List</b><span class="d">Fall 2023 – Spring 2025.</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="skills">
+    <div class="wrap">
+      <div class="rail label">Skills</div>
+      <div>
+        <h2>Skills</h2>
+        <div class="skills">
+          <div><span class="label">Technical</span><p>Python, R, MATLAB, SQL, Git</p></div>
+          <div><span class="label">Research</span><p>Experimental design, statistical analysis, literature review, scientific writing</p></div>
+          <div><span class="label">Languages</span><p>English (native), Spanish (conversational)</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="wrap">
+      <div class="rail label">Contact</div>
+      <div>
+        <h2>Let's talk</h2>
+        <p style="max-width:55ch;margin:0 0 1.25rem">I'm happy to share my transcript, references, or code samples. Email is the fastest way to reach me.</p>
+        <div class="contact-row">
+          <span class="addr" id="email">you@university.edu</span>
+          <button class="btn" id="copy-btn" type="button">Copy email</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">© 2026 Your Name · Last updated November 2026</div></footer>
+
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme-btn');
+  try{var saved=localStorage.getItem('theme'); if(saved) root.setAttribute('data-theme',saved);}catch(e){}
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    var next=cur==='dark'?'light':'dark'; root.setAttribute('data-theme',next);
+    try{localStorage.setItem('theme',next);}catch(e){}
+  });
+  var copy=document.getElementById('copy-btn'), email=document.getElementById('email');
+  copy.addEventListener('click',function(){
+    var t=email.textContent;
+    var done=function(){copy.textContent='Copied';setTimeout(function(){copy.textContent='Copy email'},1600)};
+    var fallback=function(){var r=document.createRange();r.selectNodeContents(email);var s=getSelection();s.removeAllRanges();s.addRange(r);copy.textContent='Selected, press Ctrl+C'};
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(done,fallback)}else{fallback()}
+  });
+})();
+</script>
+<!--BODY-END-->
+</body>
+</html>
