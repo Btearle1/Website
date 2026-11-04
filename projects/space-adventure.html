@@ -32,7 +32,7 @@
       <h1>Space Adventure Game</h1>
       <p class="lede">A multi-chapter text adventure written in C for an STM32 Cortex-M4. The player plays over a UART serial console, and the puzzles compute their answers in inline ARM assembly.</p>
       <div class="chips"><span class="chip">C</span><span class="chip">ARM Assembly</span><span class="chip">STM32</span><span class="chip">UART</span><span class="chip">arm-none-eabi-gcc</span></div>
-      <div class="meta"><div><span class="label">Course</span><p><span class="placeholder">Hardware Programming?</span></p></div><div><span class="label">When</span><p><span class="placeholder">Summer 2026?</span></p></div><div><span class="label">Board</span><p><span class="placeholder">STM32 board model</span></p></div><div><span class="label">Source</span><p><span class="placeholder">GitHub repo link</span></p></div></div>
+      <div class="meta"><div><span class="label">Course</span><p><span class="placeholder">Hardware Programming?</span></p></div><div><span class="label">When</span><p><span class="placeholder">Summer 2026?</span></p></div><div><span class="label">Board</span><p><span class="placeholder">STM32 board model</span></p></div><div><span class="label">Source</span><p><a href="https://github.com/Btearle1/Website/blob/main/projects/code/space-adventure.c">space-adventure.c</a></p></div></div>
       <nav class="toc" aria-label="On this page"><a href="#architecture">Architecture</a><a href="#code">Code</a><a href="#demo">Demo</a><a href="#learned">Takeaways</a></nav>
     </div>
   </section>
@@ -57,7 +57,67 @@
       <div class="rail label">Code</div>
       <div class="prose">
         <h2>Code highlights</h2>
-<div class="code"><div class="code-head"><span>io.h: target switch</span><span>to add</span></div><div class="slot"><div><b>Code excerpt goes here</b><br>The #ifdef block that picks UART vs stdio</div></div></div><div class="code"><div class="code-head"><span>puzzle.c: inline assembly</span><span>to add</span></div><div class="slot"><div><b>Code excerpt goes here</b><br>One puzzle that uses MOV / ADD / LSL</div></div></div><div class="code"><div class="code-head"><span>linker script</span><span>to add</span></div><div class="slot"><div><b>Code excerpt goes here</b><br>The memory layout section (FLASH / RAM)</div></div></div>        <p><span class="placeholder">Link to the full source on GitHub.</span></p>
+        <p>The full game is one C file of about 380 lines. These are the parts I'm proudest of.</p>
+        <h3>Running the puzzle in real ARM assembly</h3>
+        <p>The player sees three ARM instructions and has to work out what ends up in R0. Instead of hardcoding the answer, the game runs those exact instructions with inline assembly and checks against the result.</p>
+<div class="code"><div class="code-head"><span>space-adventure.c · hard_puzzle_asm()</span><span>Cortex-M4 inline asm</span></div><pre><code><span class="tok-c">/* hard mode: 20 &lt;&lt; 2 = 80, then +1 = 81. LSL by 2 is the same as multiplying by 4 */</span>
+<span class="tok-k">int32_t</span> hard_puzzle_asm(<span class="tok-k">void</span>) {
+    <span class="tok-k">int32_t</span> result;
+    __asm volatile (
+        <span class="tok-s">".syntax unified \n\t"</span>
+        <span class="tok-s">"MOV r0, #20    \n\t"</span>
+        <span class="tok-s">"LSL r0, r0, #2 \n\t"</span>
+        <span class="tok-s">"ADD r0, r0, #1 \n\t"</span>
+        <span class="tok-s">"MOV %[out], r0 \n\t"</span>
+        : [out] <span class="tok-s">"=r"</span> (result)
+        :
+        : <span class="tok-s">"r0"</span>
+    );
+    <span class="tok-k">return</span> result;
+}</code></pre></div><div class="code"><div class="code-head"><span>space-adventure.c · chapter 2 check</span><span></span></div><pre><code><span class="tok-k">if</span> (difficulty == 1) {
+    printf(<span class="tok-s">"\n--- Chapter 2: The Asteroid Field ---\n"</span>);
+    printf(<span class="tok-s">"Your ship unexpectedly enters the asteroid field...\n"</span>);
+    printf(<span class="tok-s">"What is the decimal value of R0 after the following commands?\n"</span>
+           <span class="tok-s">"MOV R0, #20\nLSL R0, R0, #2\nADD R0, R0, #1\n&gt; "</span>);
+    strcpy(input, <span class="tok-s">""</span>);
+    scanf(<span class="tok-s">"%63s"</span>, input);
+    <span class="tok-k">if</span> (atoi(input) == hard_puzzle_asm()) {   <span class="tok-c">// compare against what the asm actually computed</span>
+        printf(<span class="tok-s">"\nCorrect! The ship is repaired and you continue on your journey.\n"</span>);
+        puzzle1_solved = 1;
+    } <span class="tok-k">else</span> {
+        printf(<span class="tok-s">"\nIncorrect! The correct answer was %ld. Game Over.\n"</span>, (long)hard_puzzle_asm());
+        printf(<span class="tok-s">"Please press Enter to return to the main menu.\n"</span>);
+        <span class="tok-k">while</span> (getchar() != '\n');   <span class="tok-c">// clear out the leftover newline from scanf</span>
+        getchar();
+        <span class="tok-k">return</span> 0;
+    }
+}</code></pre></div>        <h3>Ohm's law and bit widths</h3>
+        <p>Later chapters test hardware basics: the max unsigned value of a 4- or 8-bit register, and current through series resistors. The 2.5 A answer is compared as a string because <code>atoi</code> would drop the decimal.</p>
+<div class="code"><div class="code-head"><span>space-adventure.c · chapter 4 (hard)</span><span></span></div><pre><code><span class="tok-c">// I = 25/10 = 2.5 A. using strcmp here since atoi would chop off the .5</span>
+printf(<span class="tok-s">"A 25 volt voltage source is connected to two 5 ohm resistors in SERIES. What is the current flowing through the circuit?\n&gt; "</span>);
+strcpy(input, <span class="tok-s">""</span>);
+scanf(<span class="tok-s">"%63s"</span>, input);
+<span class="tok-k">if</span> (strcmp(input, <span class="tok-s">"2.5"</span>) == 0) {
+    printf(<span class="tok-s">"\nCorrect! You thread the needle through the debris field and make it out safely!\n"</span>);
+    ...
+}</code></pre></div>        <h3>Pronouns that match the player</h3>
+<div class="code"><div class="code-head"><span>space-adventure.c · set_pronouns()</span><span></span></div><pre><code><span class="tok-c">// sets he/him/his etc so the crew dialogue matches what the player picked</span>
+<span class="tok-k">void</span> set_pronouns(<span class="tok-k">void</span>) {
+    <span class="tok-k">if</span> (strcmp(gender, <span class="tok-s">"male"</span>) == 0) {
+        strcpy(pronoun_subject, <span class="tok-s">"he"</span>);
+        strcpy(pronoun_object, <span class="tok-s">"him"</span>);
+        strcpy(pronoun_possessive, <span class="tok-s">"his"</span>);
+    } <span class="tok-k">else</span> <span class="tok-k">if</span> (strcmp(gender, <span class="tok-s">"female"</span>) == 0) {
+        strcpy(pronoun_subject, <span class="tok-s">"she"</span>);
+        strcpy(pronoun_object, <span class="tok-s">"her"</span>);
+        strcpy(pronoun_possessive, <span class="tok-s">"her"</span>);
+    } <span class="tok-k">else</span> {
+        <span class="tok-c">// anything that isnt male/female just gets they/them</span>
+        strcpy(pronoun_subject, <span class="tok-s">"they"</span>);
+        strcpy(pronoun_object, <span class="tok-s">"them"</span>);
+        strcpy(pronoun_possessive, <span class="tok-s">"their"</span>);
+    }
+}</code></pre></div>        <div class="links"><a href="https://github.com/Btearle1/Website/blob/main/projects/code/space-adventure.c">View the full source (space-adventure.c) →</a></div>
       </div>
     </div>
   </section>
