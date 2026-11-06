@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!--BODY-START-->
-<title>Radiation Detection & Laser-Marking System · Brayden Tearle</title>
+<title>NESEL Research · Brayden Tearle</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Undergraduate research at NESEL, Kennesaw State: reverse-engineering and extending a radiation detection and laser-marking system.">
+<meta name="description" content="Undergraduate research at NESEL, Kennesaw State: embedded instrumentation, hardware/software integration and CAD.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -29,54 +29,48 @@
     <div class="wrap">
       <a class="back" href="../index.html#research">← Back to portfolio</a>
       <span class="label">Undergraduate research · NESEL, Kennesaw State</span>
-      <h1>Radiation Detection & Laser-Marking System</h1>
-      <p class="lede">I took over an undocumented radiation detection and laser-marking system, reconstructed how it works, fixed its laser housing, and am now building new web-interface software for it.</p>
-      <div class="chips"><span class="chip warn">In progress</span><span class="chip">Raspberry Pi</span><span class="chip">ESP32</span><span class="chip">Python / Flask</span><span class="chip">Autodesk Fusion</span></div>
-      <div class="meta"><div><span class="label">Lab</span><p>NESEL, Kennesaw State</p></div><div><span class="label">When</span><p>Fall 2026 – present</p></div><div><span class="label">Advisor</span><p><span class="placeholder">Advisor name</span></p></div><div><span class="label">Role</span><p>Undergraduate Researcher</p></div></div>
-      <nav class="toc" aria-label="On this page"><a href="#system">System</a><a href="#housing">Housing</a><a href="#software">Software</a><a href="#learned">Takeaways</a></nav>
+      <h1>Research instrumentation at NESEL</h1>
+      <p class="lede">I work on an embedded instrumentation system in a Kennesaw State research lab, covering hardware, firmware integration and software.</p>
+      <div class="chips"><span class="chip warn">Ongoing</span><span class="chip">Embedded Linux</span><span class="chip">Microcontrollers</span><span class="chip">Python</span><span class="chip">CAD &amp; 3D printing</span></div>
+      <div class="meta"><div><span class="label">Lab</span><p>NESEL, Kennesaw State</p></div><div><span class="label">Role</span><p>Undergraduate Researcher</p></div><div><span class="label">When</span><p>Fall 2026 – present</p></div><div><span class="label">Status</span><p>Ongoing</p></div></div>
     </div>
   </section>
 
-  <section class="block" id="system">
+  <section class="block" id="role">
     <div class="wrap">
-      <div class="rail label">System</div>
+      <div class="rail label">My role</div>
       <div class="prose">
-        <h2>Reverse-engineering the system</h2>
-<figure><div class="diagram"><svg viewBox="0 0 760 240" role="img" aria-label="System diagram: a browser talks to a Flask app on a Raspberry Pi, which drives an ESP32 pan/tilt link over serial and stepper motors over GPIO to aim the laser module"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="arrow" d="M0 0L10 5L0 10z"/></marker></defs><rect class="box" x="20" y="90" width="130" height="60" rx="6"/><text x="85.0" y="114.0" text-anchor="middle">Browser</text><text class="sub" x="85.0" y="132.0" text-anchor="middle">operator UI</text><path class="wire" d="M150 120 L230 120" marker-end="url(#ah)"/><text class="sub" x="190" y="110" text-anchor="middle">HTTP</text><rect class="box hl" x="230" y="80" width="170" height="80" rx="6"/><text x="315.0" y="114.0" text-anchor="middle">Raspberry Pi</text><text class="sub" x="315.0" y="132.0" text-anchor="middle">Python / Flask</text><path class="wire" d="M400 100 L480 50" marker-end="url(#ah)"/><text class="sub" x="450" y="62" text-anchor="middle">serial</text><path class="wire" d="M400 140 L480 190" marker-end="url(#ah)"/><text class="sub" x="450" y="182" text-anchor="middle">GPIO</text><rect class="box" x="480" y="20" width="140" height="60" rx="6"/><text x="550.0" y="44.0" text-anchor="middle">ESP32</text><text class="sub" x="550.0" y="62.0" text-anchor="middle">pan / tilt control</text><rect class="box" x="480" y="160" width="140" height="60" rx="6"/><text x="550.0" y="184.0" text-anchor="middle">Stepper drivers</text><text class="sub" x="550.0" y="202.0" text-anchor="middle">+ motors</text><path class="wire" d="M620 50 L650 50 L650 110 L670 110" marker-end="url(#ah)"/><path class="wire" d="M620 190 L650 190 L650 130 L670 130" marker-end="url(#ah)"/><rect class="box" x="670" y="90" width="80" height="60" rx="6"/><text x="710.0" y="114.0" text-anchor="middle">Laser</text><text class="sub" x="710.0" y="132.0" text-anchor="middle">module</text></svg></div><figcaption>The architecture I reconstructed. The Pi runs the Flask web interface and coordinates an ESP32 over serial plus stepper motors over GPIO.</figcaption></figure>        <p>The system arrived with minimal documentation, so I rebuilt its architecture from the hardware and source. I mapped how the Python/Flask web interface, the ESP32 serial pan/tilt link and the GPIO stepper control fit together.</p>
-        <p><span class="placeholder">Add what the system is used for in the lab and where the radiation detector fits in this picture.</span></p>
+        <h2>What I do</h2>
+        <ul>
+          <li><b>Reverse-engineering.</b> I took over a lab system that had almost no documentation and reconstructed how its hardware and software work together, so the lab could maintain and extend it.</li>
+          <li><b>Hardware redesign.</b> I found flaws in a mechanical component that affected the system's accuracy, then redesigned it in CAD and 3D printed the replacement.</li>
+          <li><b>Software development.</b> I'm building new features for the system's web-based control interface.</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <section class="block" id="housing">
+  <section class="block" id="skills">
     <div class="wrap">
-      <div class="rail label">Housing</div>
+      <div class="rail label">Skills</div>
       <div class="prose">
-        <h2>Redesigning the laser housing</h2>
-        <p>The original laser module housing had design flaws that affected how the laser mounted and aligned. I redesigned it in Autodesk Fusion and 3D printed the new version.</p>
-<div class="gallery"><div class="slot"><div><b>Original housing</b><br>Photo or render showing the flaw</div></div><div class="slot"><div><b>Redesigned housing</b><br>Fusion render or photo of the printed part</div></div></div>
+        <h2>Skills and tools</h2>
+        <div class="skills">
+          <div><span class="label">Hardware</span><p>Raspberry Pi, ESP32, stepper motors, GPIO, serial communication</p></div>
+          <div><span class="label">Software</span><p>Python, Flask, Linux</p></div>
+          <div><span class="label">Design</span><p>Autodesk Fusion, 3D printing</p></div>
+          <div><span class="label">Methods</span><p>Reverse-engineering undocumented systems, hardware/software integration, debugging across hardware and software</p></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="block" id="software">
+  <section class="block" id="confidential">
     <div class="wrap">
-      <div class="rail label">Software</div>
+      <div class="rail label">Note</div>
       <div class="prose">
-        <h2>New web interface</h2>
-        <p>I'm now developing new web-interface software for the system, starting with a live crosshair overlay that shows where the laser is aimed.</p>
-<div class="slot"><div><b>Interface screenshot</b><br>The crosshair overlay in action</div></div>
-<div class="code"><div class="code-head"><span>crosshair overlay</span><span>to add</span></div><div class="slot"><div><b>Code excerpt goes here</b><br>A short excerpt, once your advisor is OK with sharing lab code</div></div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="learned">
-    <div class="wrap">
-      <div class="rail label">Takeaways</div>
-      <div class="prose">
-        <h2>What I'm learning</h2>
-        <p><span class="placeholder">What reverse-engineering an undocumented system taught you, and what's next for the project.</span></p>
+        <h2>About the details</h2>
+        <p>This is active lab research, so the specifics of the project, its data and its results are confidential. I'm happy to talk about my work at a high level. <a href="../index.html#contact">Get in touch</a>.</p>
       </div>
     </div>
   </section>
