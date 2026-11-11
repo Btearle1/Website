@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--BODY-START-->
+<title>Space Adventure Game · Brayden Tearle</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A multi-chapter text adventure in C and inline ARM assembly running on an STM32 Cortex-M4 over UART.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Brayden Tearle</a>
+    <nav aria-label="Sections"><ul>
+      <li><a href="../index.html#research">Research</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul></nav>
+    <button class="theme-btn" id="theme-btn" type="button" aria-label="Toggle color theme">Theme</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="proj-hero">
+    <div class="wrap">
+      <a class="back" href="../index.html#projects">← Back to portfolio</a>
+      <span class="label">Embedded systems project</span>
+      <h1>Space Adventure Game</h1>
+      <p class="lede">A multi-chapter text adventure written in C for an STM32 Cortex-M4. The player plays over a UART serial console, and the puzzles compute their answers in inline ARM assembly.</p>
+      <div class="chips"><span class="chip">C</span><span class="chip">ARM Assembly</span><span class="chip">STM32</span><span class="chip">UART</span><span class="chip">arm-none-eabi-gcc</span></div>
+      <div class="meta"><div><span class="label">Course</span><p><span class="placeholder">Hardware Programming?</span></p></div><div><span class="label">When</span><p><span class="placeholder">Summer 2026?</span></p></div><div><span class="label">Board</span><p><span class="placeholder">STM32 board model</span></p></div><div><span class="label">Source</span><p><a href="https://github.com/Btearle1/Website/blob/main/projects/code/space-adventure.c">space-adventure.c</a></p></div></div>
+      <nav class="toc" aria-label="On this page"><a href="#architecture">Architecture</a><a href="#code">Code</a><a href="#demo">Demo</a><a href="#learned">Takeaways</a></nav>
+    </div>
+  </section>
+
+  <section class="block" id="architecture">
+    <div class="wrap">
+      <div class="rail label">Architecture</div>
+      <div class="prose">
+        <h2>How it's built</h2>
+<figure><div class="diagram"><svg viewBox="0 0 760 230" role="img" aria-label="Build diagram: one C source tree compiles for x86 for testing and for the STM32 through arm-none-eabi-gcc; the STM32 talks to a serial terminal over UART"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="arrow" d="M0 0L10 5L0 10z"/></marker></defs><rect class="box hl" x="20" y="85" width="150" height="60" rx="6"/><text x="95.0" y="109.0" text-anchor="middle">Game source</text><text class="sub" x="95.0" y="127.0" text-anchor="middle">C + inline ARM asm</text><path class="wire" d="M170 105 L240 50" marker-end="url(#ah)"/><path class="wire" d="M170 125 L240 180" marker-end="url(#ah)"/><rect class="box" x="240" y="20" width="170" height="60" rx="6"/><text x="325.0" y="44.0" text-anchor="middle">gcc (x86)</text><text class="sub" x="325.0" y="62.0" text-anchor="middle">fast test build</text><rect class="box" x="240" y="150" width="170" height="60" rx="6"/><text x="325.0" y="174.0" text-anchor="middle">arm-none-eabi-gcc</text><text class="sub" x="325.0" y="192.0" text-anchor="middle">+ linker script</text><path class="wire" d="M410 50 L480 50" marker-end="url(#ah)"/><path class="wire" d="M410 180 L480 180" marker-end="url(#ah)"/><rect class="box" x="480" y="20" width="130" height="60" rx="6"/><text x="545.0" y="44.0" text-anchor="middle">Desktop</text><text class="sub" x="545.0" y="62.0" text-anchor="middle">debug run</text><rect class="box hl" x="480" y="150" width="130" height="60" rx="6"/><text x="545.0" y="174.0" text-anchor="middle">STM32</text><text class="sub" x="545.0" y="192.0" text-anchor="middle">Cortex-M4</text><path class="wire" d="M610 170 L660 170" marker-end="url(#ah)"/><text class="sub" x="635" y="160" text-anchor="middle">UART</text><path class="wire" d="M660 190 L610 190" marker-end="url(#ah)"/><rect class="box" x="660" y="150" width="90" height="60" rx="6"/><text x="705.0" y="174.0" text-anchor="middle">Terminal</text><text class="sub" x="705.0" y="192.0" text-anchor="middle">player I/O</text></svg></div><figcaption>One source tree, two targets. Conditional compilation picks the I/O layer: stdio on the desktop, UART on the board.</figcaption></figure>        <h3>Dual-target builds</h3>
+        <p>Flashing the board for every change is slow, so the same code also builds for x86. Conditional compilation swaps the input/output layer, which let me test game logic on my laptop and only flash the STM32 for hardware testing.</p>
+        <h3>UART as the game console</h3>
+        <p>The game reads player input and prints story text over UART serial, so any serial terminal on a PC becomes the screen and keyboard. <span class="placeholder">Add baud rate and whether you used polling or interrupts.</span></p>
+        <h3>Puzzles in assembly</h3>
+        <p>Several puzzles compute their answers with inline ARM assembly (<code>MOV</code>, <code>ADD</code>, <code>LSL</code>) and build on ideas like bit widths and Ohm's law.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="code">
+    <div class="wrap">
+      <div class="rail label">Code</div>
+      <div class="prose">
+        <h2>Code highlights</h2>
+        <p>The full game is one C file of about 380 lines. These are the parts I'm proudest of.</p>
+        <h3>Running the puzzle in real ARM assembly</h3>
+        <p>The player sees three ARM instructions and has to work out what ends up in R0. Instead of hardcoding the answer, the game runs those exact instructions with inline assembly and checks against the result.</p>
+<div class="code"><div class="code-head"><span>space-adventure.c · hard_puzzle_asm()</span><span>Cortex-M4 inline asm</span></div><pre><code><span class="tok-c">/* hard mode: 20 &lt;&lt; 2 = 80, then +1 = 81. LSL by 2 is the same as multiplying by 4 */</span>
+<span class="tok-k">int32_t</span> hard_puzzle_asm(<span class="tok-k">void</span>) {
+    <span class="tok-k">int32_t</span> result;
+    __asm volatile (
+        <span class="tok-s">".syntax unified \n\t"</span>
+        <span class="tok-s">"MOV r0, #20    \n\t"</span>
+        <span class="tok-s">"LSL r0, r0, #2 \n\t"</span>
+        <span class="tok-s">"ADD r0, r0, #1 \n\t"</span>
+        <span class="tok-s">"MOV %[out], r0 \n\t"</span>
+        : [out] <span class="tok-s">"=r"</span> (result)
+        :
+        : <span class="tok-s">"r0"</span>
+    );
+    <span class="tok-k">return</span> result;
+}</code></pre></div><div class="code"><div class="code-head"><span>space-adventure.c · chapter 2 check</span><span></span></div><pre><code><span class="tok-k">if</span> (difficulty == 1) {
+    printf(<span class="tok-s">"\n--- Chapter 2: The Asteroid Field ---\n"</span>);
+    printf(<span class="tok-s">"Your ship unexpectedly enters the asteroid field...\n"</span>);
+    printf(<span class="tok-s">"What is the decimal value of R0 after the following commands?\n"</span>
+           <span class="tok-s">"MOV R0, #20\nLSL R0, R0, #2\nADD R0, R0, #1\n&gt; "</span>);
+    strcpy(input, <span class="tok-s">""</span>);
+    scanf(<span class="tok-s">"%63s"</span>, input);
+    <span class="tok-k">if</span> (atoi(input) == hard_puzzle_asm()) {   <span class="tok-c">// compare against what the asm actually computed</span>
+        printf(<span class="tok-s">"\nCorrect! The ship is repaired and you continue on your journey.\n"</span>);
+        puzzle1_solved = 1;
+    } <span class="tok-k">else</span> {
+        printf(<span class="tok-s">"\nIncorrect! The correct answer was %ld. Game Over.\n"</span>, (long)hard_puzzle_asm());
+        printf(<span class="tok-s">"Please press Enter to return to the main menu.\n"</span>);
+        <span class="tok-k">while</span> (getchar() != '\n');   <span class="tok-c">// clear out the leftover newline from scanf</span>
+        getchar();
+        <span class="tok-k">return</span> 0;
+    }
+}</code></pre></div>        <h3>Ohm's law and bit widths</h3>
+        <p>Later chapters test hardware basics: the max unsigned value of a 4- or 8-bit register, and current through series resistors. The 2.5 A answer is compared as a string because <code>atoi</code> would drop the decimal.</p>
+<div class="code"><div class="code-head"><span>space-adventure.c · chapter 4 (hard)</span><span></span></div><pre><code><span class="tok-c">// I = 25/10 = 2.5 A. using strcmp here since atoi would chop off the .5</span>
+printf(<span class="tok-s">"A 25 volt voltage source is connected to two 5 ohm resistors in SERIES. What is the current flowing through the circuit?\n&gt; "</span>);
+strcpy(input, <span class="tok-s">""</span>);
+scanf(<span class="tok-s">"%63s"</span>, input);
+<span class="tok-k">if</span> (strcmp(input, <span class="tok-s">"2.5"</span>) == 0) {
+    printf(<span class="tok-s">"\nCorrect! You thread the needle through the debris field and make it out safely!\n"</span>);
+    ...
+}</code></pre></div>        <h3>Pronouns that match the player</h3>
+<div class="code"><div class="code-head"><span>space-adventure.c · set_pronouns()</span><span></span></div><pre><code><span class="tok-c">// sets he/him/his etc so the crew dialogue matches what the player picked</span>
+<span class="tok-k">void</span> set_pronouns(<span class="tok-k">void</span>) {
+    <span class="tok-k">if</span> (strcmp(gender, <span class="tok-s">"male"</span>) == 0) {
+        strcpy(pronoun_subject, <span class="tok-s">"he"</span>);
+        strcpy(pronoun_object, <span class="tok-s">"him"</span>);
+        strcpy(pronoun_possessive, <span class="tok-s">"his"</span>);
+    } <span class="tok-k">else</span> <span class="tok-k">if</span> (strcmp(gender, <span class="tok-s">"female"</span>) == 0) {
+        strcpy(pronoun_subject, <span class="tok-s">"she"</span>);
+        strcpy(pronoun_object, <span class="tok-s">"her"</span>);
+        strcpy(pronoun_possessive, <span class="tok-s">"her"</span>);
+    } <span class="tok-k">else</span> {
+        <span class="tok-c">// anything that isnt male/female just gets they/them</span>
+        strcpy(pronoun_subject, <span class="tok-s">"they"</span>);
+        strcpy(pronoun_object, <span class="tok-s">"them"</span>);
+        strcpy(pronoun_possessive, <span class="tok-s">"their"</span>);
+    }
+}</code></pre></div>        <div class="links"><a href="https://github.com/Btearle1/Website/blob/main/projects/code/space-adventure.c">View the full source (space-adventure.c) →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="demo">
+    <div class="wrap">
+      <div class="rail label">Demo</div>
+      <div class="prose">
+        <h2>See it run</h2>
+<div class="gallery"><div class="slot"><div><b>Terminal screenshot</b><br>A few lines of gameplay in the serial terminal</div></div><div class="slot"><div><b>Board photo</b><br>The STM32 board connected to your laptop</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="learned">
+    <div class="wrap">
+      <div class="rail label">Takeaways</div>
+      <div class="prose">
+        <h2>What I learned</h2>
+        <p><span class="placeholder">What was hard (linker scripts? UART timing?), how you debugged it, and what you would add next.</span></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">© 2026 Brayden Tearle · <a href="../index.html">Back to portfolio</a></div></footer>
+<script src="../assets/site.js"></script>
+<!--BODY-END-->
+</body>
+</html>
