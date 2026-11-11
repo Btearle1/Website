@@ -6,7 +6,7 @@
 <!--BODY-START-->
 <title>Traffic Light Sequencer · Brayden Tearle</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="A 555-timer-clocked traffic light controller built from a 74LS163 counter and discrete decoding logic.">
+<meta name="description" content="A four-way traffic light controller built from a 555 timer, a 74LS163 counter and 74LS21 AND-gate decoding.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -30,8 +30,19 @@
       <a class="back" href="../index.html#projects">← Back to portfolio</a>
       <span class="label">Digital logic project</span>
       <h1>Traffic Light Sequencer</h1>
-      <p class="lede">A traffic-light controller built entirely from discrete logic: a 555 timer for the clock, a 74LS163 4-bit synchronous counter for state, and decoding gates to drive the lights.</p>
-      <div class="chips"><span class="chip">555 Timer</span><span class="chip">74LS163</span><span class="chip">Sequential circuits</span></div>
+      <p class="lede">A traffic-light controller built entirely from discrete logic: a 555 timer for the clock, a 74LS163 4-bit synchronous counter for state, and AND-gate decoding to cycle the red and green signals of a four-way intersection.</p>
+      <div class="chips"><span class="chip">555 Timer</span><span class="chip">74LS163</span><span class="chip">74LS21</span><span class="chip">Sequential circuits</span></div>
+    </div>
+  </section>
+
+  <section class="block" id="intersection">
+    <div class="wrap">
+      <div class="rail label">Intersection</div>
+      <div class="prose">
+        <h2>The intersection</h2>
+        <p>The controller runs a four-way intersection with eight signals, A through H. Signals that can safely move together are paired, so the cycle has four phases: A + C, G + E, B + D and H + F. Each signal is either red or green. When its phase is active it turns green, and the rest of the time it stays red.</p>
+        <figure><div class="diagram photo"><img src="img/traffic-intersection.jpg" style="max-width:26rem;margin:0 auto" alt="Intersection map with signals A through H and the paths each pair of signals controls" loading="lazy"></div><figcaption>My intersection map. Each color is one pair of signals that goes green together.</figcaption></figure>
+      </div>
     </div>
   </section>
 
@@ -40,10 +51,34 @@
       <div class="rail label">Overview</div>
       <div class="prose">
         <h2>How it works</h2>
-<figure><div class="diagram"><svg viewBox="0 0 760 200" role="img" aria-label="Block diagram: 555 timer clocks a 74LS163 counter whose outputs are decoded to drive red, yellow and green lights"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="arrow" d="M0 0L10 5L0 10z"/></marker></defs><rect class="box" x="20" y="70" width="140" height="60" rx="6"/><text x="90.0" y="94.0" text-anchor="middle">555 timer</text><text class="sub" x="90.0" y="112.0" text-anchor="middle">astable clock</text><path class="wire" d="M160 100 L240 100" marker-end="url(#ah)"/><text class="sub" x="200" y="90" text-anchor="middle">CLK</text><rect class="box hl" x="240" y="70" width="150" height="60" rx="6"/><text x="315.0" y="94.0" text-anchor="middle">74LS163</text><text class="sub" x="315.0" y="112.0" text-anchor="middle">4-bit sync counter</text><path class="wire" d="M390 100 L470 100" marker-end="url(#ah)"/><text class="sub" x="430" y="90" text-anchor="middle">Q0–Q3</text><rect class="box" x="470" y="70" width="130" height="60" rx="6"/><text x="535.0" y="94.0" text-anchor="middle">Decode logic</text><text class="sub" x="535.0" y="112.0" text-anchor="middle">gates</text><rect class="box" x="650" y="20" width="90" height="40" rx="6"/><text x="695.0" y="44.0" text-anchor="middle">Red</text><rect class="box" x="650" y="80" width="90" height="40" rx="6"/><text x="695.0" y="104.0" text-anchor="middle">Yellow</text><rect class="box" x="650" y="140" width="90" height="40" rx="6"/><text x="695.0" y="164.0" text-anchor="middle">Green</text><path class="wire" d="M600 90 L625 90 L625 40 L650 40" marker-end="url(#ah)"/><path class="wire" d="M600 100 L650 100" marker-end="url(#ah)"/><path class="wire" d="M600 110 L625 110 L625 160 L650 160" marker-end="url(#ah)"/></svg></div><figcaption>Signal flow. The 555 sets the tick rate, the counter tracks where we are in the cycle, and the decode logic turns each count into a light.</figcaption></figure>        <h3>The clock</h3>
-        <p>The 555 runs in astable mode, so it outputs a steady square wave.</p>
+        <figure><div class="diagram photo"><img src="img/traffic-logic.jpg" alt="Logic diagram: a 555 clock drives a 74LS163 counter whose outputs A to D feed four 4-input AND gates for the ac, bd, gc and fh signal pairs" loading="lazy"></div><figcaption>Block diagram. The 555 clocks the counter, and four AND gates decode the count into the four signal pairs.</figcaption></figure>
+        <h3>The clock</h3>
+        <p>The 555 runs in astable mode, so it outputs a steady square wave that sets how long each step of the cycle lasts.</p>
         <h3>The counter</h3>
-        <p>Each clock edge advances the 74LS163. Because it's synchronous, all four outputs change together on the same edge, which keeps the decode logic glitch-free.</p>
+        <p>Each clock edge advances the 74LS163. Because it's synchronous, all four outputs change together on the same edge, which keeps the decode logic glitch-free. When the count reaches 8 (1000), output D is inverted into the LOAD pin, so on the next clock the counter loads 0000 and the cycle starts over.</p>
+        <h3>The decode logic</h3>
+        <p>Two 74LS21 chips give me four 4-input AND gates, one per signal pair. Each gate gets the counter outputs, inverted where needed, so it only goes high on its own count: 0001 for A + C, 0011 for G + E, 0101 for B + D and 0111 for H + F.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="sequence">
+    <div class="wrap">
+      <div class="rail label">Sequence</div>
+      <div class="prose">
+        <h2>State sequence</h2>
+        <figure><div class="diagram photo"><img src="img/traffic-states.jpg" alt="State diagram: counts 0000, 0010, 0100 and 0110 have lights off; 0001 AC, 0011 GE, 0101 BD and 0111 HF have lights on; 1000 loads back to 0000" loading="lazy"></div><figcaption>My state diagram. Even counts are an all-red gap between phases, and odd counts turn one pair green.</figcaption></figure>
+        <div class="tbl"><table><thead><tr><th>Count (D C B A)</th><th>State</th><th>Green signals</th></tr></thead><tbody><tr><td class="num">0000</td><td>All red</td><td>—</td></tr><tr><td class="num">0001</td><td>One pair green</td><td>A + C</td></tr><tr><td class="num">0010</td><td>All red</td><td>—</td></tr><tr><td class="num">0011</td><td>One pair green</td><td>G + E</td></tr><tr><td class="num">0100</td><td>All red</td><td>—</td></tr><tr><td class="num">0101</td><td>One pair green</td><td>B + D</td></tr><tr><td class="num">0110</td><td>All red</td><td>—</td></tr><tr><td class="num">0111</td><td>One pair green</td><td>H + F</td></tr><tr><td class="num">1000</td><td>Load → 0000</td><td>—</td></tr></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="schematic">
+    <div class="wrap">
+      <div class="rail label">Schematic</div>
+      <div class="prose">
+        <h2>Circuit schematic</h2>
+        <figure><div class="diagram photo"><img src="img/traffic-schematic.jpg" alt="Hand-drawn schematic of the 555 timer, 74LS163 counter with an inverter from QD to LOAD, inverters, and two 74LS21 AND gate chips driving the AC, BD, GC and FH outputs" loading="lazy"></div><figcaption>Full wiring schematic: the 555 clock, the 74LS163 counter and the two 74LS21 decoder chips.</figcaption></figure>
       </div>
     </div>
   </section>
