@@ -154,3 +154,38 @@ figcaption{font:400 .8rem/1.5 var(--mono);color:var(--muted);margin-top:.6rem}
 .tbl th{font:500 .72rem/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .tbl tr:last-child td{border-bottom:0}
 .tbl td.num{font:500 .9rem var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- Clean vector diagrams ---------- */
+:root{--sig1:#c93434;--sig2:#2563c9;--sig3:#1d8048;--sig4:#7a3fbf}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--sig1:#ff8080;--sig2:#7fb0ff;--sig3:#6fd3a0;--sig4:#c7a0ff}}
+:root[data-theme="dark"]{--sig1:#ff8080;--sig2:#7fb0ff;--sig3:#6fd3a0;--sig4:#c7a0ff}
+.v2{display:block;width:100%;height:auto}
+.diagram .v2{min-width:40rem}
+.diagram.wide .v2{min-width:52rem}
+.diagram.square .v2{min-width:0;max-width:30rem;margin:0 auto}
+.v2 .w{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+.v2 .w.thick{stroke-width:3}
+.v2 .dot{fill:var(--ink)}
+.v2 .box{fill:var(--bg);stroke:var(--ink);stroke-width:1.5}
+.v2 .box.hl{fill:var(--accent-soft);stroke:var(--accent)}
+.v2 .chip{fill:var(--surface);stroke:var(--ink);stroke-width:2}
+.v2 .gate{fill:var(--bg);stroke:var(--ink);stroke-width:1.6}
+.v2 .bub{fill:var(--bg);stroke:var(--ink);stroke-width:1.4}
+.v2 .ah{fill:var(--ink)}
+.v2 text.t{fill:var(--ink);font:500 13px var(--mono)}
+.v2 text.big{font:600 15px var(--mono)}
+.v2 text.big2{font:700 54px var(--display)}
+.v2 text.ts{fill:var(--muted);font:400 11px var(--mono)}
+.v2 text.pin{fill:var(--muted);font:400 10px var(--mono)}
+.v2 text.hd{font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;fill:var(--muted)}
+.v2 text.hd2{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.v2 .s1{stroke:var(--sig1)} .v2 .s2{stroke:var(--sig2)} .v2 .s3{stroke:var(--sig3)} .v2 .s4{stroke:var(--sig4)}
+.v2 text.lbl.s1{fill:var(--sig1);stroke:none} .v2 text.lbl.s2{fill:var(--sig2);stroke:none} .v2 text.lbl.s3{fill:var(--sig3);stroke:none} .v2 text.lbl.s4{fill:var(--sig4);stroke:none}
+.v2 .gate.s1,.v2 .gate.s2,.v2 .gate.s3,.v2 .gate.s4{stroke-width:2}
+.v2 .road{fill:var(--surface)}
+.v2 .blk{fill:var(--line)}
+.v2 .median{stroke:var(--muted);stroke-width:3;stroke-dasharray:14 10;fill:none}
+.v2 .path{fill:none;stroke-width:9;stroke-linecap:round}
+.v2 .path.s1{stroke:var(--sig1)} .v2 .path.s2{stroke:var(--sig2)}
+.v2 #ai .ah,.v2 marker .ah{fill:currentColor}
+.v2 .ahc.s1{fill:var(--sig1);stroke:none} .v2 .ahc.s2{fill:var(--sig2);stroke:none}
